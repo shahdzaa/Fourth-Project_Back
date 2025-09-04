@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('engineers', function (Blueprint $table) {
             $table->id();
             $table->string('first_name');
-            $table->string('second_name');
+            $table->string('last_name');
             $table->string('phone_number');
             $table->string('address');
             $table->date('age');
-            $table->char('specialization');
+            $table->enum('specialization',['مدني','عمارة','كهرباء','ميكانيك']);
             $table->timestamps();
         });
     }

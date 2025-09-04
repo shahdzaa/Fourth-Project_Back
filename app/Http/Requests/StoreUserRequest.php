@@ -21,11 +21,24 @@ class StoreUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Password::min(8)],
             'role' => 'required|string|in:admin,user' // اضبط القيم حسب احتياجك
         ];
+
+        if ($this->isMethod('put') || $this->isMethod('patch')) {
+            $rules=[
+                'name' => 'sometimes|string|max:255',
+                'email' => 'sometimes|email|max:255|unique:users,email,' . $this->user->id,
+                'password' => ['sometimes', 'confirmed', Password::min(8)],
+                'role' => 'sometimes|string|in:admin,user,editor'
+            ];
+        }
+        return $rules;
+
     }
+
+
 }

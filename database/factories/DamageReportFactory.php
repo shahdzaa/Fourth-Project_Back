@@ -22,7 +22,7 @@ class DamageReportFactory extends Factory
         return [
             'photo' => $this->faker->imageUrl(500, 500, 'buildings', true, 'damage'),
             'degree_of_damage' => $this->faker->randomElement(['0', '1', '2', '3', '4']),
-            'report_number' => $this->faker->unique()->numberBetween(1000, 9999),
+            'report_number' => $this->faker->randomElement(['1','2']),
             'building_id' => Building::inRandomOrder()->first()->id,
             'foundation_id'=> Foundation::inRandomOrder()->first()->id,
             'committee_id' => Committee::inRandomOrder()->first()->id

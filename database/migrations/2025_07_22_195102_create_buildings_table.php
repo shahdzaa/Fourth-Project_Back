@@ -18,7 +18,7 @@ return new class extends Migration
             $table->boolean('is_legal');
             $table->integer('number_of_floors');
             $table->integer('number_of_floors_violating');
-            $table->string('structural_pattern');
+            $table->enum('structural_pattern',['إطار بيتوني','جدران بيتونية','حجري','خشبي','مختلط']);
             $table->integer('number_of_families_before_departure');
             $table->integer('number_of_families_after_departure');
             $table->enum('level_of_damage',[0,1,2,3,4]);

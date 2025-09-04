@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\StoreUserRequest;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
@@ -42,7 +42,7 @@ class UserController extends Controller
     }
 
 
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(StoreUserRequest $request, User $user)
     {
         // الحصول على البيانات المفحوصة مسبقاً من الـ Request
         $validatedData = $request->validated();

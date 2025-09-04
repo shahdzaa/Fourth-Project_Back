@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('photo',500);
             $table->enum('degree_of_damage',[0,1,2,3,4]);
-            $table->integer('report_number');
+            $table->enum('report_number',[1,2]);
             $table->foreignId('building_id')->constrained()->onDelete('cascade');
             $table->foreignId('foundation_id')->constrained()->onDelete('cascade');
             $table->timestamps();
