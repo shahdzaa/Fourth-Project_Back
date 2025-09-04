@@ -20,7 +20,7 @@ class EngineerFactory extends Factory
         $syrianPhoneNumber = $this->faker->unique()->regexify('\+9639[345689][0-9]{7}');
         return [
             'first_name' => $faker->firstName(),
-            'second_name' => $faker->lastName(),
+            'last_name' => $faker->lastName(),
             'phone_number' => $syrianPhoneNumber,
             'address' => $faker->address(),
             'age' => $this->faker->dateTimeBetween('-60 years', '-24 years')->format('Y-m-d'),

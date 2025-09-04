@@ -18,7 +18,16 @@ class BuildingFactory extends Factory
     {
         $numberOfFloors = $this->faker->numberBetween(2, 6);
         $faker = \Faker\Factory::create('ar_SA');
+        static $buildingIds;
+        if (!$buildingIds) {
+            $buildingIds = collect(file(storage_path('app/public/building_ids.txt'), FILE_IGNORE_NEW_LINES))
+                ->map(fn($line) => str_replace('way/', '', $line))
+                ->shuffle();
+        }
+        $externalId = $buildingIds->pop();
+
         return [
+            'external_id' => $externalId,
             'name' => 'بناء ' . $faker->unique()->lastName(),
             'is_legal' => $this->faker->boolean(80),
             'number_of_floors' => $numberOfFloors,

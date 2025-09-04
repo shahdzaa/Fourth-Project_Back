@@ -19,6 +19,7 @@ class Building extends Model
     protected $fillable = [
         'name',
         'building',
+        'external_id',
         'is_legal',
         'number_of_floors',
         'number_of_floors_violating',
@@ -29,5 +30,6 @@ class Building extends Model
         'neighbourhood_id',
         'is_materials_from_the_neighborhood',
     ];
+
 
 }
