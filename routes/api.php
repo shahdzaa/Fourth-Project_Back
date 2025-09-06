@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\BuildingController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Models\User;
@@ -60,3 +61,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // متاح لأي مستخدم مسجل دخوله
     Route::post('/logout', [AuthController::class, 'logout']);
 });
+
+Route::get('/buildings', [BuildingController::class, 'index']);
+Route::get('/buildings/{building}', [BuildingController::class, 'show']);
