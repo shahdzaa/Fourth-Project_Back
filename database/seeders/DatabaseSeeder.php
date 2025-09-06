@@ -31,12 +31,12 @@ class DatabaseSeeder extends Seeder
 //            SectorSeeder::class,
 //            NeighbourhoodSeeder::class,
             BuildingSeeder::class,
-            FoundationSeeder::class,
-            CommitteeSeeder::class,
-            DamageReportSeeder::class,
-            CommitteeNeighbourhoodSeeder::class,
-            EngineerSeeder::class,
-            CommitteeEngineerSeeder::class,
+//            FoundationSeeder::class,
+//            CommitteeSeeder::class,
+//            DamageReportSeeder::class,
+//            CommitteeNeighbourhoodSeeder::class,
+//            EngineerSeeder::class,
+//            CommitteeEngineerSeeder::class,
         ]);
         //$this->call(BuildingsGeojsonSeeder::class);
     }

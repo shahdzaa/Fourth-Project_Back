@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class DamageReportResource extends JsonResource
 {
@@ -18,7 +19,9 @@ class DamageReportResource extends JsonResource
             'id' => $this->id, // دائمًا من الجيد إرجاع الـ ID
             'report_number' => $this->report_number,
             'degree_of_damage' => $this->degree_of_damage,
-            'photo_url' => $this->photo,
+            'image_url' => $this->photo
+                ? Storage::url($this->photo)
+                : null,
             'building_name' => $this->building->name, // جلب الاسم من علاقة البناية
             'foundation_name' => $this->foundation->name, // جلب الاسم من علاقة المؤسسة
             'created_at'=>$this->created_at,
