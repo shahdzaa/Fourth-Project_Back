@@ -22,12 +22,7 @@ class StoreForm1Request extends FormRequest
     public function rules()
     {
         return [
-            'damage_report.degree_of_damage' => 'required|in:0,1,2,3,4',
-            'damage_report.report_number' => 'required|in:1,2',
-            'damage_report.foundation_id' => 'required|exists:foundations,id',
-            'damage_report.committee_id' => 'required|exists:committees,id',
-            'damage_report.photo' => 'nullable|string|max:500',
-
+            // بيانات البناء
             'building.name' => 'nullable|string|max:255',
             'building.is_legal' => 'required|boolean',
             'building.number_of_floors' => 'required|integer|min:0',
@@ -39,6 +34,14 @@ class StoreForm1Request extends FormRequest
             'building.level_of_damage' => 'required|in:0,1,2,3,4',
             'building.is_materials_from_the_neighborhood' => 'required|boolean',
             'building.neighbourhood_id' => 'required|exists:neighbourhoods,id',
+
+            // بيانات تقارير الضرر
+            'damage_reports' => 'required|array|min:1',
+            'damage_reports.*.photo' => 'nullable|string|max:500',
+            'damage_reports.*.degree_of_damage' => 'required|in:0,1,2,3,4',
+            'damage_reports.*.report_number' => 'required|in:1',
+            'damage_reports.*.foundation_id' => 'required|exists:foundations,id',
+            'damage_reports.*.committee_id' => 'required|exists:committees,id',
         ];
     }
 }

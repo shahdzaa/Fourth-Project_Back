@@ -20,5 +20,11 @@ class DamageReport extends Model
     {
         return $this->belongsTo(Committee::class);
     }
-    protected $fillable=['photo','degree_of_damage','report_number','building_id','foundation_id','committee_id'];
+    protected $fillable=['photo',
+        'degree_of_damage',
+        'report_number',
+        'building_id',
+        'foundation_id',
+        'committee_id'
+    ];
 }

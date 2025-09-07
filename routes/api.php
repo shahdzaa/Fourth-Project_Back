@@ -40,7 +40,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });
-Route::get('/buildings', [Form1Controller::class, 'index']);
+Route::get('/buildings', [BuildingController::class, 'index']);
+Route::get('form1/buildings', [Form1Controller::class, 'index']);
 Route::get('/buildings/edit/{id}', [Form1Controller::class, 'editData']);
 Route::put('/buildings/update/{id}', [Form1Controller::class, 'update']);
 Route::post('/buildings/{building}', [Form1Controller::class, 'store']);

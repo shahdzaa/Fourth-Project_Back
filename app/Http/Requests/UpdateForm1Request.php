@@ -40,8 +40,9 @@ class UpdateForm1Request extends FormRequest
             'damage_reports.*.id' => 'required|exists:damage_reports,id',
             'damage_reports.*.photo' => 'nullable|string|max:500',
             'damage_reports.*.degree_of_damage' => 'required|in:0,1,2,3,4',
-            'damage_reports.*.report_number' => 'required|in:1,2',
+            'damage_reports.*.report_number' => 'required|in:1',
             'damage_reports.*.foundation_id' => 'required|exists:foundations,id',
+            'damage_reports.*.committee_id' => 'required|exists:committees,id',
         ];
 
     }

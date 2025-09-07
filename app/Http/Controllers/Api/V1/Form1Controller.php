@@ -17,11 +17,15 @@ class Form1Controller extends Controller
 {
     public function index()
     {
-        $buildings = Building::all();
+        $buildings = Building::whereHas('damageReports', function ($query) {
+            $query->where('report_number', 1);
+        })->get();
+
         return response()->json([
-            'data'=>BuildingResource::collection($buildings),
+            'data' => BuildingResource::collection($buildings),
         ]);
     }
+
     public function editData($id)
     {
         $building = Building::with(['damageReports'])->findOrFail($id);
@@ -35,9 +39,9 @@ class Form1Controller extends Controller
     {
         $request->validated();
         $building = Building::findOrFail($id);
-        // تعديل بيانات البناء
+
         $building->update($request->input('building'));
-        // تعديل تقارير الضرر
+
         foreach ($request->input('damage_reports') as $reportData) {
             $report = DamageReport::find($reportData['id']);
             if ($report && $report->building_id == $building->id) {
@@ -47,31 +51,35 @@ class Form1Controller extends Controller
 
         return response()->json(['message' => 'تم التعديل بنجاح']);
     }
-    public function store(StoreForm1Request $request, Building $building)
+    public function store(StoreForm1Request $request, $id)
     {
-        // --- أولاً: إنشاء تقرير الضرر (الكود الحالي) ---
-        $reportData = $request->validated('damage_report');
-        $report = new DamageReport($reportData);
-        $report->building_id = $building->id;
-        $report->save();
+        $validated = $request->validated();
 
-        // --- ثانياً: تحديث بيانات البناء (الإضافة الجديدة) ---
-        // احصل على بيانات البناء التي تم التحقق منها فقط
-        $buildingData = $request->validated('building');
+        $building = Building::findOrFail($id);
 
-        // تحقق مما إذا كانت هناك بيانات لتحديثها لتجنب استعلام غير ضروري
+        // تحديث بيانات البناء
+        $buildingData = $validated['building'] ?? [];
         if (!empty($buildingData)) {
             $building->update($buildingData);
         }
 
-        // --- ثالثاً: إرجاع الاستجابة ---
+        // إنشاء تقارير أضرار جديدة
+        $damageReportsData = $validated['damage_reports'] ?? [];
+        $createdReports = [];
+
+        foreach ($damageReportsData as $reportData) {
+            $report = new DamageReport($reportData);
+            $report->building_id = $building->id;
+            $report->save();
+            $createdReports[] = $report;
+        }
+
         return response()->json([
-            'message' => 'تم إنشاء التقرير وتحديث بيانات البناء بنجاح',
-            'report' => $report,
-            'building' => $building->fresh() // إرجاع بيانات البناء المحدثة
+            'message' => 'تم تحديث البناء وإنشاء التقارير بنجاح',
+            'building' => $building->fresh(),
+            'created_reports' => $createdReports
         ]);
     }
-    // app/Http/Controllers/Form1Controller.php
 
     public function updateAndCleanReports(Request $request, $id)
     {
