@@ -9,6 +9,7 @@ use App\Http\Resources\BuildingResource;
 use App\Models\Building;
 use App\Models\DamageReport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 
 class Form1Controller extends Controller
@@ -70,5 +71,26 @@ class Form1Controller extends Controller
             'building' => $building->fresh() // إرجاع بيانات البناء المحدثة
         ]);
     }
+    // app/Http/Controllers/Form1Controller.php
+
+    public function updateAndCleanReports(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'level_of_damage' => 'required|in:0,1,2,3,4',
+            'is_materials_from_the_neighborhood' => 'required|boolean',
+        ]);
+
+        DB::transaction(function () use ($id, $validated) {
+            $building = Building::findOrFail($id);
+
+            $building->damageReports()->where('report_number', 1)->delete();
+
+            $building->update($validated);
+        });
+
+        return response()->json(['message' => 'تم تعديل البناية وحذف التقارير المرتبطة بها بنجاح']);
+    }
+
+
 
 }
