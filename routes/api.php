@@ -44,3 +44,4 @@ Route::get('/buildings', [Form1Controller::class, 'index']);
 Route::get('/buildings/edit/{id}', [Form1Controller::class, 'editData']);
 Route::put('/buildings/update/{id}', [Form1Controller::class, 'update']);
 Route::post('/buildings/{building}', [Form1Controller::class, 'store']);
+Route::delete('/buildings/delete/{id}', [Form1Controller::class, 'destroy']);

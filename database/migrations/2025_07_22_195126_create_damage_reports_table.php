@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('damage_reports', function (Blueprint $table) {
             $table->id();
-            $table->string('photo',500);
+            $table->string('photo',500)->nullable();
             $table->enum('degree_of_damage',[0,1,2,3,4]);
             $table->enum('report_number',[1,2]);
             $table->foreignId('building_id')->constrained()->onDelete('cascade');
