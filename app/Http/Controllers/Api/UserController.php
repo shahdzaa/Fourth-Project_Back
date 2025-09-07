@@ -36,7 +36,6 @@ class UserController extends Controller
         // Laravel سيقوم تلقائياً بإيجاد المستخدم بناءً على الـ {id} في المسار
         // إذا لم يجده، سيعيد خطأ 404 Not Found تلقائياً
         return response()->json([
-            'status' => 'success',
             'data'=> new UserResource($user)
         ]);
     }
@@ -56,7 +55,6 @@ class UserController extends Controller
         $user->update($validatedData);
 
         return response()->json([
-            'status' => 'success',
             'message' => 'User updated successfully',
             'data'=> new UserResource($user)
         ]);
@@ -71,6 +69,6 @@ class UserController extends Controller
 
         $user->delete();
 
-        return response()->json(['status' => 'success', 'message' => 'User deleted successfully']);
+        return response()->json(['message' => 'User deleted successfully']);
     }
 }

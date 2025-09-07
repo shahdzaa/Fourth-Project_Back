@@ -94,7 +94,6 @@ class DashboardController extends Controller
 
             // إرجاع استجابة JSON منظمة
             return response()->json([
-                'message' => 'Dashboard data retrieved successfully.',
                 'data' => $data,
             ], 200);
 

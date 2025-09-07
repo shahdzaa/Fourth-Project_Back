@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
 //            SectorSeeder::class,
 //            NeighbourhoodSeeder::class,
-            BuildingSeeder::class,
+//            BuildingSeeder::class,
 //            FoundationSeeder::class,
 //            CommitteeSeeder::class,
 //            DamageReportSeeder::class,
