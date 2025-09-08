@@ -18,5 +18,21 @@ class BuildingController extends Controller
             'data' => BuildingResource::collection($buildings),
         ]);
     }
+    public function statsByTypeLevel1()
+    {
+        $types = ['بناء سكني', 'مستشفى', 'مدرسة', 'جامع', 'كنيسة'];
+        $counts = [];
+
+        foreach ($types as $type) {
+            $counts[] = \App\Models\Building::where('type', $type)
+                ->where('level_of_damage', 1)
+                ->count();
+        }
+
+        return response()->json([
+            'labels' => $types,
+            'data' => $counts,
+        ]);
+    }
 
 }

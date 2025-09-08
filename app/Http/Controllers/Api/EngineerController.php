@@ -12,12 +12,21 @@ class EngineerController extends Controller
 
     public function bySpecialization()
     {
-        $data = Engineer::select('specialization', DB::raw('count(*) as total'))
-            ->groupBy('specialization')
-            ->get();
+        $committees = \App\Models\Committee::with(['engineers', 'neighbourhoods'])->get();
 
-        return response()->json($data);
+        // يمكنك تخصيص البيانات حسب الحاجة للفرونت
+        $result = $committees->map(function($committee) {
+            return [
+                'manager' => $committee->engineers[0]->name ?? null,
+                'engineer2' => $committee->engineers[1]->name ?? null,
+                'engineer3' => $committee->engineers[2]->name ?? null,
+                'neighbourhoods' => $committee->neighbourhoods->pluck('name')->toArray(),
+            ];
+        });
+
+        return response()->json($result);
     }
+
     /**
      * Display a listing of the resource.
      */

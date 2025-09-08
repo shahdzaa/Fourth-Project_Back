@@ -56,3 +56,4 @@ Route::get('form2/buildings', [Form2Controller::class, 'index']);
 Route::get('/buildings/form2/edit/{id}', [Form1Controller::class, 'editData']);
 Route::get('/engineers-by-specialization', [EngineerController::class, 'bySpecialization']);
 Route::get('/committees', [CommitteeController::class, 'index']);
+Route::get('/buildings/stats/type-level1', [\App\Http\Controllers\Api\BuildingController::class, 'statsByTypeLevel1']);
