@@ -34,5 +34,20 @@ class BuildingController extends Controller
             'data' => $counts,
         ]);
     }
+    public function statsLegalVsIllegalLevel4()
+    {
+        $legal = \App\Models\Building::where('is_legal', true)
+            ->where('level_of_damage', 4)
+            ->count();
+
+        $illegal = \App\Models\Building::where('is_legal', false)
+            ->where('level_of_damage', 4)
+            ->count();
+
+        return response()->json([
+            'labels' => ['نظامية', 'غير نظامية'],
+            'data' => [$legal, $illegal],
+        ]);
+    }
 
 }
