@@ -29,13 +29,19 @@ class Form1Controller extends Controller
 
     public function editData($id)
     {
-        $building = Building::with(['damageReports'])->findOrFail($id);
+        // استخدمنا 'neighbourhood' بدلاً من 'neighborhood' لتطابق اسم الدالة في الموديل
+        $building = Building::with([
+            'neighbourhood', // <-- التعديل هنا
+            'damageReports.foundation',
+            'damageReports.committee'
+        ])->findOrFail($id);
 
         return response()->json([
             'building' => $building,
-            'damage_reports' => $building->damageReports,
         ]);
     }
+
+
 
     public function update(StoreForm1Request $request, $id)
     {
@@ -52,8 +58,8 @@ class Form1Controller extends Controller
         }
 
         return response()->json(['message' => 'تم التعديل بنجاح']);
-    }
 
+    }
     public function store(StoreForm1Request $request, $id)
     {
         $validated = $request->validated();

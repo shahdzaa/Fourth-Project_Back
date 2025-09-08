@@ -18,43 +18,50 @@ use App\Http\Controllers\Api\AuthController;
 | API Routes
 |--------------------------------------------------------------------------
 */
-
+ Route::middleware(\App\Http\Middleware\Cors::class)->group(function () {
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware('auth:sanctum')->group(function () {
+ Route::middleware('auth:sanctum')->group(function () {
 
-    Route::post('/users/create', [AuthController::class, 'createUser'])
-        ->can('create', User::class);
+Route::post('/users/create', [AuthController::class, 'createUser'])
+    ->can('create', User::class);
 
-    Route::get('/users', [UserController::class, 'index'])
-        ->can('viewAny', User::class); // <-- هذا هو الإصلاح الصحيح
+Route::get('/users', [UserController::class, 'index'])
+    ->can('viewAny', User::class); // <-- هذا هو الإصلاح الصحيح
 
-    Route::get('/users/{user}', [UserController::class, 'show'])->can('view', 'user');
+Route::get('/users/{user}', [UserController::class, 'show'])->can('view', 'user');
 
-    Route::put('/users/{user}', [UserController::class, 'update'])->can('update', 'user');
+Route::put('/users/{user}', [UserController::class, 'update'])->can('update', 'user');
 
-    Route::delete('/users/{user}', [UserController::class, 'destroy'])->can('delete', 'user');
+Route::delete('/users/{user}', [UserController::class, 'destroy'])->can('delete', 'user');
 
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
-
-    Route::get('/v1/dashboard', [DashboardController::class, 'index']);
-
-    Route::post('/logout', [AuthController::class, 'logout']);
-
+Route::get('/user', function (Request $request) {
+    return $request->user();
 });
+
+Route::get('/v1/dashboard', [DashboardController::class, 'index']);
+
+Route::post('/logout', [AuthController::class, 'logout']);
+
+ });
 Route::get('/buildings', [BuildingController::class, 'index']);
 //Processes Form1
 Route::get('form1/buildings', [Form1Controller::class, 'index']);
 Route::get('/buildings/form1/edit/{id}', [Form1Controller::class, 'editData']);
-Route::put('/buildings/update/{id}', [Form1Controller::class, 'update']);
-Route::post('/buildings/{building}', [Form1Controller::class, 'store']);
-Route::delete('/buildings/delete/{id}', [Form1Controller::class, 'updateAndCleanReports']);
+Route::put('/buildings/form1/update/{id}', [Form1Controller::class, 'update']);
+Route::post('/buildings/form1/{building}', [Form1Controller::class, 'store']);
+Route::delete('/buildings/form1/delete/{id}', [Form1Controller::class, 'updateAndCleanReports']);
 //Processes Form2
 Route::get('form2/buildings', [Form2Controller::class, 'index']);
-Route::get('/buildings/form2/edit/{id}', [Form1Controller::class, 'editData']);
+Route::get('/buildings/form2/edit/{id}', [Form2Controller::class, 'editData']);
+Route::put('/buildings/form2/update/{id}', [Form2Controller::class, 'update']);
+Route::post('/buildings/form2/{building}', [Form2Controller::class, 'store']);
+Route::delete('/buildings/form2/delete/{id}', [Form2Controller::class, 'updateAndCleanReports']);
+
+
+//Dashboard Table
 Route::get('/engineers-by-specialization', [EngineerController::class, 'bySpecialization']);
 Route::get('/committees', [CommitteeController::class, 'index']);
 Route::get('/buildings/stats/type-level1', [\App\Http\Controllers\Api\BuildingController::class, 'statsByTypeLevel1']);
 Route::get('/buildings/stats/legal-vs-illegal-level4', [\App\Http\Controllers\Api\BuildingController::class, 'statsLegalVsIllegalLevel4']);
+ });

@@ -16,26 +16,26 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-         User::factory()->create([
-             'name' => 'Admin',
-             'email' => 'admin@example.com',
-             'password'=>'123456789+'
-         ]);
-        User::factory()->create([
-            'name' => 'User',
-            'email' => 'user@example.com',
-            'password'=>'123456789-'
-        ]);
+//         User::factory()->create([
+//             'name' => 'Admin',
+//             'email' => 'admin@example.com',
+//             'password'=>'123456789+'
+//         ]);
+//        User::factory()->create([
+//            'name' => 'User',
+//            'email' => 'user@example.com',
+//            'password'=>'123456789-'
+//        ]);
         $this->call([
-            SectorSeeder::class,
-            NeighbourhoodSeeder::class,
+//            SectorSeeder::class,
+//            NeighbourhoodSeeder::class,
             BuildingSeeder::class,
-            FoundationSeeder::class,
-            CommitteeSeeder::class,
-            DamageReportSeeder::class,
-            CommitteeNeighbourhoodSeeder::class,
-            EngineerSeeder::class,
-            CommitteeEngineerSeeder::class,
+//            FoundationSeeder::class,
+//            CommitteeSeeder::class,
+//            DamageReportSeeder::class,
+//            CommitteeNeighbourhoodSeeder::class,
+//            EngineerSeeder::class,
+//            CommitteeEngineerSeeder::class,
         ]);
         //$this->call(BuildingsGeojsonSeeder::class);
     }

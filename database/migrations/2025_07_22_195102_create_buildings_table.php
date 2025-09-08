@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('buildings', function (Blueprint $table) {
             $table->id();
-            $table->string('external_id')->unique()->nullable();
+            $table->unsignedBigInteger('external_id')->unique()->nullable();
             $table->string('name')->nullable();
             $table->enum('type',['مستشفى','مدرسة','بناء سكني','جامع','كنيسة']);
             $table->boolean('is_legal');

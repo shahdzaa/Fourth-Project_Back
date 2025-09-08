@@ -27,7 +27,7 @@ class BuildingFactory extends Factory
 
         // هذه هي البيانات التي سيتم إنشاؤها
         return [
-            'external_id' => 'way/'.$this->faker->unique()->randomNumber(), // سنستخدم قيمة وهمية مؤقتة
+            'external_id' =>$this->faker->unique()->randomNumber(), // سنستخدم قيمة وهمية مؤقتة
             'name' => 'بناء ' . $faker->lastName(),
             'is_legal' => $this->faker->boolean(80),
             'number_of_floors' => $numberOfFloors,
