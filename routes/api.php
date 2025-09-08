@@ -41,6 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/v1/dashboard', [DashboardController::class, 'index']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/engineers-by-specialization', [EngineerController::class, 'bySpecialization']);
 });
 Route::get('/buildings', [BuildingController::class, 'index']);
 //Processes Form1
@@ -52,5 +53,5 @@ Route::delete('/buildings/delete/{id}', [Form1Controller::class, 'updateAndClean
 //Processes Form2
 Route::get('form2/buildings', [Form2Controller::class, 'index']);
 Route::get('/buildings/form2/edit/{id}', [Form1Controller::class, 'editData']);
-Route::get('/engineers-by-specialization', [EngineerController::class, 'bySpecialization']);
+
 
