@@ -1,0 +1,379 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "My Project API Documentation",
+        "description": "This is a documentation for my project APIs",
+        "contact": {
+            "email": "admin@myproject.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/dashboard": {
+            "get": {
+                "tags": [
+                    "Dashboard"
+                ],
+                "summary": "جلب بيانات لوحة التحكم",
+                "operationId": "d1625943bfc57cc98d4de5135ef923aa",
+                "responses": {
+                    "200": {
+                        "description": "تم جلب البيانات بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Dashboard data retrieved successfully."
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "خطأ في الخادم"
+                    }
+                }
+            }
+        },
+        "/api/v1/buildings": {
+            "get": {
+                "tags": [
+                    "Buildings"
+                ],
+                "summary": "Get list of buildings with report number 1",
+                "description": "Returns list of buildings that have damage reports with report number 1",
+                "operationId": "getBuildingsList",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/BuildingResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/v1/buildings/{id}/edit": {
+            "get": {
+                "tags": [
+                    "Buildings"
+                ],
+                "summary": "Get building data for editing",
+                "description": "Returns building data and its damage reports for editing",
+                "operationId": "editBuildingData",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Building ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "building": {
+                                            "$ref": "#/components/schemas/BuildingResource"
+                                        },
+                                        "damage_reports": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Building not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/buildings/{id}": {
+            "put": {
+                "tags": [
+                    "Buildings"
+                ],
+                "summary": "Update existing building",
+                "description": "Updates a building and its damage reports",
+                "operationId": "updateBuilding",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Building ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreForm1Request"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم التعديل بنجاح"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Building not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/buildings/{id}/store": {
+            "post": {
+                "tags": [
+                    "Buildings"
+                ],
+                "summary": "Store building data and damage reports",
+                "description": "Stores building data and creates new damage reports",
+                "operationId": "storeBuildingData",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Building ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreForm1Request"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم تحديث البناء وإنشاء التقارير بنجاح"
+                                        },
+                                        "building": {
+                                            "$ref": "#/components/schemas/BuildingResource"
+                                        },
+                                        "created_reports": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Building not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/buildings/{id}/clean-reports": {
+            "put": {
+                "tags": [
+                    "Buildings"
+                ],
+                "summary": "Update building and clean reports",
+                "description": "Updates building level of damage and material origin, then deletes associated damage reports with report number 1",
+                "operationId": "updateAndCleanReports",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Building ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "level_of_damage": {
+                                        "description": "مستوى الضرر",
+                                        "type": "integer",
+                                        "enum": [
+                                            0,
+                                            1,
+                                            2,
+                                            3,
+                                            4
+                                        ]
+                                    },
+                                    "is_materials_from_the_neighborhood": {
+                                        "description": "هل المواد من الحي",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم تعديل البناية وحذف التقارير المرتبطة بها بنجاح"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Building not found"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "StoreForm1Request": {
+                "title": "StoreForm1Request",
+                "description": "Store form 1 request body data",
+                "required": [
+                    "building",
+                    "damage_reports"
+                ],
+                "type": "object"
+            },
+            "BuildingResource": {
+                "title": "BuildingResource",
+                "description": "Building resource data",
+                "properties": {
+                    "id": {
+                        "description": "معرف البناء",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "اسم البناء",
+                        "type": "string"
+                    },
+                    "level_of_damage": {
+                        "description": "مستوى الضرر",
+                        "type": "integer"
+                    },
+                    "external_id": {
+                        "description": "المعرف الخارجي للبناء",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Dashboard",
+            "description": "Dashboard"
+        },
+        {
+            "name": "Buildings",
+            "description": "Buildings"
+        }
+    ]
+}

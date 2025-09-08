@@ -2,11 +2,10 @@
 
 namespace App\Http\Resources;
 
-use App\Models\DamageReport;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BuildingResource extends JsonResource
+class BuildingF2Resource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,12 +15,11 @@ class BuildingResource extends JsonResource
     public function toArray(Request $request): array
     {
         $rsources= [
-            'id' => $this->id,
             'name' => $this->name,
             'level_of_damage' => $this->level_of_damage,
-            'external_id' => $this->external_id,
+            'is_materials_from_the_neighborhood' => $this->is_materials_from_the_neighborhood,
+            'neighbourhood_id'=>$this->neighbourhood_id
         ];
         return $rsources;
     }
 }
-

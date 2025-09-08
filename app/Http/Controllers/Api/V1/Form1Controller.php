@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreForm1Request;
-use App\Http\Requests\UpdateForm1Request;
 use App\Http\Resources\BuildingResource;
 use App\Models\Building;
 use App\Models\DamageReport;
@@ -15,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 class Form1Controller extends Controller
 
 {
+
     public function index()
     {
         $buildings = Building::whereHas('damageReports', function ($query) {
@@ -26,6 +26,7 @@ class Form1Controller extends Controller
         ]);
     }
 
+
     public function editData($id)
     {
         $building = Building::with(['damageReports'])->findOrFail($id);
@@ -35,7 +36,8 @@ class Form1Controller extends Controller
             'damage_reports' => $building->damageReports,
         ]);
     }
-    public function update(UpdateForm1Request $request, $id)
+
+    public function update(StoreForm1Request $request, $id)
     {
         $request->validated();
         $building = Building::findOrFail($id);
@@ -51,6 +53,7 @@ class Form1Controller extends Controller
 
         return response()->json(['message' => 'تم التعديل بنجاح']);
     }
+
     public function store(StoreForm1Request $request, $id)
     {
         $validated = $request->validated();
@@ -80,6 +83,7 @@ class Form1Controller extends Controller
             'created_reports' => $createdReports
         ]);
     }
+
 
     public function updateAndCleanReports(Request $request, $id)
     {

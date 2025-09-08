@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\Api\BuildingController;
 use App\Http\Controllers\Api\DamageReportController;
+use App\Http\Controllers\Api\EngineerController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\Form1Controller;
+use App\Http\Controllers\Api\V1\Form2Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -41,8 +43,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 Route::get('/buildings', [BuildingController::class, 'index']);
+//Processes Form1
 Route::get('form1/buildings', [Form1Controller::class, 'index']);
-Route::get('/buildings/edit/{id}', [Form1Controller::class, 'editData']);
+Route::get('/buildings/form1/edit/{id}', [Form1Controller::class, 'editData']);
 Route::put('/buildings/update/{id}', [Form1Controller::class, 'update']);
 Route::post('/buildings/{building}', [Form1Controller::class, 'store']);
 Route::delete('/buildings/delete/{id}', [Form1Controller::class, 'updateAndCleanReports']);
+//Processes Form2
+Route::get('form2/buildings', [Form2Controller::class, 'index']);
+Route::get('/buildings/form2/edit/{id}', [Form1Controller::class, 'editData']);
+Route::get('/engineers-by-specialization', [EngineerController::class, 'bySpecialization']);
+
