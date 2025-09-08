@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\BuildingController;
+use App\Http\Controllers\Api\CommitteeController;
 use App\Http\Controllers\Api\DamageReportController;
 use App\Http\Controllers\Api\EngineerController;
 use App\Http\Controllers\Api\UserController;
@@ -54,4 +55,4 @@ Route::delete('/buildings/delete/{id}', [Form1Controller::class, 'updateAndClean
 Route::get('form2/buildings', [Form2Controller::class, 'index']);
 Route::get('/buildings/form2/edit/{id}', [Form1Controller::class, 'editData']);
 Route::get('/engineers-by-specialization', [EngineerController::class, 'bySpecialization']);
-
+Route::get('/committees', [CommitteeController::class, 'index']);
