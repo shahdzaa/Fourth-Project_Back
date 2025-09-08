@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class EngineerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function bySpecialization()
     {
         $data = Engineer::select('specialization', DB::raw('count(*) as total'))
@@ -20,6 +18,9 @@ class EngineerController extends Controller
 
         return response()->json($data);
     }
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
         //
