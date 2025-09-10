@@ -28,11 +28,9 @@ class StoreForm1Request extends FormRequest
         // --- 1. تعريف القواعد الأساسية المشتركة بين الإنشاء والتحديث ---
         $rules = [
             // بيانات البناء (بدون البادئة 'building.')
-            'name' => 'nullable|string|max:255',
             'is_legal' => 'required|boolean',
             'number_of_floors' => 'required|integer|min:0',
             'number_of_floors_violating' => 'required|integer|min:0',
-            'type' => ['required', Rule::in(['مستشفى', 'مدرسة', 'بناء سكني', 'جامع', 'كنيسة'])],
             'structural_pattern' => ['required', Rule::in(['إطار بيتوني', 'جدران بيتونية', 'حجري', 'خشبي', 'مختلط'])],
             'number_of_families_before_departure' => 'required|integer|min:0',
             'number_of_families_after_departure' => 'required|integer|min:0',

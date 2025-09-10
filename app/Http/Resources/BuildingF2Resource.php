@@ -15,6 +15,7 @@ class BuildingF2Resource extends JsonResource
     public function toArray(Request $request): array
     {
         $rsources= [
+            'id' => $this->id,
             'name' => $this->name,
             'level_of_damage' => $this->level_of_damage,
             'is_materials_from_the_neighborhood' => $this->is_materials_from_the_neighborhood,

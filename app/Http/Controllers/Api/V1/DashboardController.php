@@ -105,4 +105,182 @@ class DashboardController extends Controller
             ], 500);
         }
     }
+    public function legalVsIllegalLevel4(): \Illuminate\Http\JsonResponse
+{
+    $legal = \App\Models\Building::where('level_of_damage', 4)->where('is_legal', true)->count();
+    $illegal = \App\Models\Building::where('level_of_damage', 4)->where('is_legal', false)->count();
+
+    return response()->json([
+        'labels' => ['نظامية', 'غير نظامية'],
+        'data' => [$legal, $illegal],
+    ]);
+}
+public function severeBuildingsByType(): \Illuminate\Http\JsonResponse
+{
+    $data = \App\Models\Building::where('level_of_damage', 4)
+        ->selectRaw('type, COUNT(*) as total')
+        ->groupBy('type')
+        ->pluck('total', 'type');
+
+    // تحويل الـ pluck إلى مصفوفات labels و data
+    $labels = [];
+    $values = [];
+    foreach ($data as $type => $count) {
+        $labels[] = $type;
+        $values[] = $count;
+    }
+
+    return response()->json([
+        'labels' => $labels,
+        'data' => $values,
+    ]);
+}
+public function buildingsByDamageLevel(): \Illuminate\Http\JsonResponse
+{
+    $data = \App\Models\Building::selectRaw('level_of_damage, COUNT(*) as total')
+        ->groupBy('level_of_damage')
+        ->orderBy('level_of_damage')
+        ->pluck('total', 'level_of_damage');
+
+    $labels = [];
+    $values = [];
+    foreach ($data as $level => $count) {
+        $labels[] = $level;
+        $values[] = $count;
+    }
+
+    return response()->json([
+        'labels' => $labels,
+        'data' => $values,
+    ]);
+}
+
+public function familiesByNeighbourhood(): \Illuminate\Http\JsonResponse
+{
+    $data = \App\Models\Building::selectRaw('neighbourhood_id, SUM(number_of_families_before_departure) as total_families')
+        ->groupBy('neighbourhood_id')
+        ->with('neighbourhood:id,name')
+        ->get();
+
+    $labels = [];
+    $values = [];
+    foreach ($data as $item) {
+        $labels[] = $item->neighbourhood->name ?? 'غير محدد';
+        $values[] = (int) $item->total_families;
+    }
+
+    return response()->json([
+        'labels' => $labels,
+        'data' => $values,
+    ]);
+}
+public function engineersBySpecialization(): \Illuminate\Http\JsonResponse
+{
+    $data = \App\Models\Engineer::selectRaw('specialization, COUNT(*) as total')
+        ->groupBy('specialization')
+        ->get();
+
+    return response()->json($data);
+}
+public function stats(): \Illuminate\Http\JsonResponse
+{
+    $stats = [
+        'severe_buildings_count' => \App\Models\Building::where('level_of_damage', 4)->count(),
+        'minor_buildings_count'  => \App\Models\Building::where('level_of_damage', 1)->count(),
+        'unique_reports_count'   => \App\Models\DamageReport::distinct('building_id')->count(),
+        'committees_count'       => \App\Models\Committee::count(),
+    ];
+
+    return response()->json($stats);
+}
+public function latestCases(): \Illuminate\Http\JsonResponse
+{
+    $cases = \App\Models\Building::with('neighbourhood')
+    ->orderBy('created_at', 'desc')
+    ->take(4)
+    ->get()
+    ->map(function($item) {
+        $damage_status = match((int)$item->level_of_damage) {
+            0 => 'سليم',
+            1 => 'ضرر بسيط',
+            2 => 'ضرر متوسط',
+            3 => 'ضرر شديد',
+            4 => 'خطر انهيار',
+            default => 'غير محدد'
+        };
+        return [
+            'building_number' => $item->external_id ?? $item->id,
+            'neighbourhood' => $item->neighbourhood->name ?? 'غير محدد',
+            'damage_status' => $damage_status,
+        ];
+    });
+
+return response()->json($cases);
+}
+public function committees(): \Illuminate\Http\JsonResponse
+{
+    $committees = \App\Models\Committee::with([
+        'engineers', // جميع المهندسين في اللجنة
+        'neighbourhoods' // جميع الأحياء المعززة للجنة
+    ])
+    ->orderBy('created_at', 'desc')
+    ->take(4)
+    ->get()
+    ->map(function($committee) {
+        // جلب المدير
+        $manager = $committee->engineers()->wherePivot('is_manager', true)->first();
+        // جلب المهندسين غير المديرين
+        $otherEngineers = $committee->engineers()->wherePivot('is_manager', false)->take(2)->get();
+
+        return [
+            'manager' => $manager ? $manager->first_name . ' ' . $manager->last_name : 'غير محدد',
+            'engineer2' => $otherEngineers[0]->first_name . ' ' . $otherEngineers[0]->last_name ?? 'غير محدد',
+            'engineer3' => $otherEngineers[1]->first_name . ' ' . $otherEngineers[1]->last_name ?? 'غير محدد',
+            'neighbourhood' => $committee->neighbourhoods->pluck('name')->implode(', ') ?: 'غير محدد',
+        ];
+    });
+
+    return response()->json($committees);
+}
+public function dangerousBuildings(): \Illuminate\Http\JsonResponse
+{
+    $buildings = \App\Models\Building::with('neighbourhood')
+        ->where('level_of_damage', 4)
+        ->orWhere('is_materials_from_the_neighborhood', true)
+        ->orderBy('created_at', 'desc')
+        ->take(10)
+        ->get()
+        ->map(function($item) {
+            return [
+                'building_number' => $item->external_id ?? $item->id,
+                'neighbourhood' => $item->neighbourhood->name ?? 'غير محدد',
+            ];
+        });
+
+    return response()->json($buildings);
+}
+public function storeCommittee(Request $request)
+{
+    $request->validate([
+        'manager_id' => 'required|exists:engineers,id',
+        'engineer2_id' => 'required|exists:engineers,id',
+        'engineer3_id' => 'required|exists:engineers,id',
+        'neighbourhood_id' => 'required|exists:neighbourhoods,id',
+    ]);
+
+    // إنشاء اللجنة
+    $committee = \App\Models\Committee::create([
+        'user_id' => optional(auth()->user())->id ?? 1, // أو أي مستخدم افتراضي
+    ]);
+
+    // ربط المهندسين
+    $committee->engineers()->attach($request->manager_id, ['is_manager' => true]);
+    $committee->engineers()->attach($request->engineer2_id, ['is_manager' => false]);
+    $committee->engineers()->attach($request->engineer3_id, ['is_manager' => false]);
+
+    // ربط الحي
+    $committee->neighbourhoods()->attach($request->neighbourhood_id);
+
+    return response()->json(['success' => true, 'committee_id' => $committee->id]);
+}
 }
